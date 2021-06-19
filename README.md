@@ -1,5 +1,5 @@
-1. [kafka-zookeeper-cluster](https://github.com/autumnqfeng/docker-compose/tree/master/kafka-zookeeper-cluster)
-   * docker安装 **Kafka & zookeeper & kafka-manager** 集群
-   * kafka节点3个
-   * zookeeper节点3个
-   * kafka manager节点1个
+1. [docker安装 **Kafka & zookeeper & kafka-manager** 集群](https://github.com/autumnqfeng/docker-compose/tree/master/kafka-zookeeper-cluster)
+   * kafka（3节点）
+   * zookeeper（3节点）
+   * kafka manager（1节点）
+
