@@ -2,30 +2,12 @@
 
 1. 镜像信息：
 
-   ```shell
-   username@host docker_compose % docker images
-   REPOSITORY                  TAG       IMAGE ID       CREATED       SIZE
-   wurstmeister/kafka          latest    c3b059ede60e   11 days ago   507MB
-   zookeeper                   3.4       4b03fe5b3f64   5 weeks ago   260MB
-   sheepkiller/kafka-manager   latest    4e4a8c5dabab   3 years ago   463MB
-   ```
-
+   <img src="./README.assets/截屏2021-06-19 下午2.27.40.png" />
+   
 2. 节点信息：
 
-   ```shell
-   username@host docker_compose % docker ps
-   CONTAINER ID   IMAGE                       COMMAND                  CREATED          STATUS          PORTS                                                                                                      NAMES
-   fce0cc61914c   sheepkiller/kafka-manager   "./start-kafka-manag…"   46 minutes ago   Up 46 minutes   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp                                                                  kafa-manager
-   76209c684286   wurstmeister/kafka          "start-kafka.sh"         46 minutes ago   Up 46 minutes   0.0.0.0:9093->9092/tcp, :::9093->9092/tcp, 0.0.0.0:9997->9999/tcp, :::9997->9999/tcp                       broker3
-   7a1d9700529f   wurstmeister/kafka          "start-kafka.sh"         46 minutes ago   Up 46 minutes   0.0.0.0:9092->9092/tcp, :::9092->9092/tcp, 0.0.0.0:9998->9999/tcp, :::9998->9999/tcp                       broker2
-   1d040c58d748   wurstmeister/kafka          "start-kafka.sh"         46 minutes ago   Up 46 minutes   0.0.0.0:9999->9999/tcp, :::9999->9999/tcp, 0.0.0.0:9091->9092/tcp, :::9091->9092/tcp                       broker1
-   ee94838f37ef   zookeeper:3.4               "/docker-entrypoint.…"   46 minutes ago   Up 46 minutes   2888/tcp, 3888/tcp, 0.0.0.0:2183->2181/tcp, :::2183->2181/tcp, 0.0.0.0:8083->8080/tcp, :::8083->8080/tcp   zoo3
-   21bead0aecfb   zookeeper:3.4               "/docker-entrypoint.…"   46 minutes ago   Up 46 minutes   2888/tcp, 0.0.0.0:2181->2181/tcp, :::2181->2181/tcp, 3888/tcp, 0.0.0.0:8081->8080/tcp, :::8081->8080/tcp   zoo1
-   ead2103b5198   zookeeper:3.4               "/docker-entrypoint.…"   46 minutes ago   Up 46 minutes   2888/tcp, 3888/tcp, 0.0.0.0:2182->2181/tcp, :::2182->2181/tcp, 0.0.0.0:8082->8080/tcp, :::8082->8080/tcp   zoo2
-   ```
-
-   <img src="./README.assets/截屏2021-06-19 下午1.31.01.png" style="zoom:50%;" />
-
+   <img src="README.assets/截屏2021-06-19 下午2.29.43.png" />
+   
 3. 部署过程
 
    * 首先保证安装好docker、docker-compose
