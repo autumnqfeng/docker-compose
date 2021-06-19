@@ -183,7 +183,7 @@
      Proposal sizes last/min/max: 36/36/1013
      ```
 
-   * kafka-manager中将zookeeper、kafka节点管理起来
+   * kafka-manager中将zookeeper、kafka节点管理起来，登录 `127.0.0.1:9000`，选择 `add cluster`
 
      <img src="./README.assets/截屏2021-06-19 下午1.53.41.png" alt="截屏2021-06-19 下午1.53.41" style="zoom:70%;" />
 
