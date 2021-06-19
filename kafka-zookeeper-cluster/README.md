@@ -12,8 +12,6 @@
 
    * 首先保证安装好docker、docker-compose
 
-   * 下载当前 `docker-compose.yml` 
-
    * 创建集群所需的网络
 
      ```shell
@@ -29,6 +27,13 @@
      e2eaa1eb843a   host        host      local
      b164fabef806   none        null      local
      b121d976130a   zoo_kafka   bridge    local
+     ```
+
+   * 下载当前 `docker-compose.yml` 
+
+     ```shell
+     git clone https://github.com/autumnqfeng/docker-compose.git
+     cd kafka-zookeeper-cluster
      ```
 
    * 执行启动命令
