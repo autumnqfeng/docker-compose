@@ -1,0 +1,182 @@
+version: '2'
+services:
+  zoo1:
+    image: zookeeper:3.4 # 镜像名称
+    restart: always # 当发生错误时自动重启
+    hostname: zoo1
+    container_name: zoo1
+    privileged: true
+    ports: # 端口
+      - 2181:2181
+      - 8081:8080
+    volumes: # 挂载数据卷
+      - ./zookeeper/zoo1/data:/data
+    environment:
+      TZ: Asia/Shanghai
+      ZOO_MY_ID: 1 # 节点ID
+      ZOO_PORT: 2181 # zookeeper端口号
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 # zookeeper节点列表
+      JVMFLAGS: " -Xmx512m -Xms512m"
+    networks:
+      default:
+        ipv4_address: 172.18.0.11
+
+  zoo2:
+    image: zookeeper:3.4
+    restart: always
+    hostname: zoo2
+    container_name: zoo2
+    privileged: true
+    ports:
+      - 2182:2181
+      - 8082:8080
+    volumes:
+      - ./zookeeper/zoo2/data:/data
+    environment:
+      TZ: Asia/Shanghai
+      ZOO_MY_ID: 2
+      ZOO_PORT: 2181
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+      JVMFLAGS: " -Xmx512m -Xms512m"
+    networks:
+      default:
+        ipv4_address: 172.18.0.12
+
+  zoo3:
+    image: zookeeper:3.4
+    restart: always
+    hostname: zoo3
+    container_name: zoo3
+    privileged: true
+    ports:
+      - 2183:2181
+      - 8083:8080
+    volumes:
+      - ./zookeeper/zoo3/data:/data
+    environment:
+      TZ: Asia/Shanghai
+      ZOO_MY_ID: 3
+      ZOO_PORT: 2181
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+      JVMFLAGS: " -Xmx512m -Xms512m"
+    networks:
+      default:
+        ipv4_address: 172.18.0.13
+
+  broker1:
+    image: wurstmeister/kafka
+    restart: always
+    privileged: true
+    hostname: broker1
+    container_name: broker1
+    ports:
+      - "9091:9092"
+      - "9999:9999"
+    links:
+      - zoo1
+      - zoo2
+      - zoo3
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_HOST_NAME: broker1
+      KAFKA_ADVERTISED_PORT: 9091
+      KAFKA_HOST_NAME: broker1
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker1:9091
+      JMX_PORT: 9999
+      KAFKA_JVM_PERFORMANCE_OPTS: " -Xmx512m -Xms512m"
+    volumes:
+      - ./kafka/docker.sock:/var/run/docker.sock
+      - ./kafka/broker1/:/kafka
+    networks:
+      default:
+        ipv4_address: 172.18.0.14
+
+  broker2:
+    image: wurstmeister/kafka
+    restart: always
+    privileged: true
+    hostname: broker2
+    container_name: broker2
+    ports:
+      - "9092:9092"
+      - "9998:9999"
+    links:
+      - zoo1
+      - zoo2
+      - zoo3
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ADVERTISED_HOST_NAME: broker2
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_HOST_NAME: broker2
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker2:9092
+      JMX_PORT: 9999
+      KAFKA_JVM_PERFORMANCE_OPTS: " -Xmx512m -Xms512m"
+    volumes:
+      - ./kafka/docker.sock:/var/run/docker.sock
+      - ./kafka/broker2/:/kafka
+    networks:
+      default:
+        ipv4_address: 172.18.0.15
+
+  broker3:
+    image: wurstmeister/kafka
+    restart: always
+    privileged: true
+    hostname: broker3
+    container_name: broker3
+    ports:
+      - "9093:9092"
+      - "9997:9999"
+    links:
+      - zoo1
+      - zoo2
+      - zoo3
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ADVERTISED_HOST_NAME: broker3
+      KAFKA_ADVERTISED_PORT: 9093
+      KAFKA_HOST_NAME: broker3
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker3:9093
+      JMX_PORT: 9999
+      KAFKA_JVM_PERFORMANCE_OPTS: " -Xmx512m -Xms512m"
+    volumes:
+      - ./kafka/docker.sock:/var/run/docker.sock
+      - ./kafka/broker3/:/kafka"
+    networks:
+      default:
+        ipv4_address: 172.18.0.16
+
+  kafka-manager:
+    image: sheepkiller/kafka-manager
+    restart: always
+    container_name: kafa-manager
+    hostname: kafka-manager
+    ports:
+      - "9000:9000"
+    links:            # 连接本compose文件创建的container
+      - broker1
+      - broker2
+      - broker3
+      - zoo1
+      - zoo2
+      - zoo3
+    environment:
+      ZK_HOSTS: zoo1:2181,zoo2:2181,zoo3:2181
+      KAFKA_BROKERS: broker1:9092,broker2:9092,broker3:9092
+      APPLICATION_SECRET: letmein
+      KM_ARGS: -Djava.net.preferIPv4Stack=true
+    networks:
+      default:
+        ipv4_address: 172.18.0.10
+
+networks:
+  default:
+    external:
+      name: zoo_kafka
